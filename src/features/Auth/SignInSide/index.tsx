@@ -49,26 +49,19 @@ const SignInSide: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    console.log('[v0] handleSubmit called, areAllFieldsValid:', areAllFieldsValid, 'loading:', loading)
-    console.log('[v0] email:', emailValidation.value, 'emailValid:', emailValidation.isValid)
-    console.log('[v0] passwordValid:', passwordValidation.isValid, 'password length:', passwordValidation.value.length)
-    console.log('[v0] password errors:', passwordValidation.errors)
-    console.log('[v0] NEXT_PUBLIC_MOCK_AUTH:', process.env.NEXT_PUBLIC_MOCK_AUTH)
-
     if (areAllFieldsValid && !loading) {
       setLoading(true)
 
       try {
-        const result = await dispatch(
+        await dispatch(
           loginUser({
             username: emailValidation.value,
             password: passwordValidation.value,
           })
         )
-        console.log('[v0] loginUser dispatch result:', JSON.stringify(result, null, 2))
         setReset(false)
       } catch (error) {
-        console.error('[v0] Authentication error:', error)
+        console.error('Authentication error:', error)
       } finally {
         setLoading(false)
       }

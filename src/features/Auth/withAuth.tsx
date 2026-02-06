@@ -4,7 +4,7 @@ import { selectIsAuthenticated } from '@/store/selectors/authSelectors'
 import { useSelector } from 'react-redux'
 import { getSession } from '@/lib/cognito'
 
-const isMockAuth = process.env.NEXT_PUBLIC_MOCK_AUTH === 'true'
+const isMockAuth = !!process.env.NEXT_PUBLIC_MOCK_AUTH
 
 // Higher Order Component (HOC) for handling authentication logic
 const withAuth = (WrappedComponent: React.FC) => {

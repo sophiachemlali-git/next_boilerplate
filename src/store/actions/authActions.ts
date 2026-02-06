@@ -7,7 +7,7 @@ import {
 } from '@/lib/cognito'
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit'
 
-const isMockAuth = process.env.NEXT_PUBLIC_MOCK_AUTH === 'true'
+const isMockAuth = !!process.env.NEXT_PUBLIC_MOCK_AUTH
 
 interface AuthUser {
   username: string
