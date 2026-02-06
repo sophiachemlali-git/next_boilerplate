@@ -1,4 +1,4 @@
-import { poolData } from '@/config/cognito'
+import { getPoolData } from '@/config/cognito'
 import {
   AuthenticationDetails,
   CognitoUser,
@@ -9,17 +9,27 @@ import {
   ISignUpResult,
 } from 'amazon-cognito-identity-js'
 
-// Create a CognitoUserPool instance using poolData
-const userPool: CognitoUserPool = new CognitoUserPool(poolData)
+// Lazily initialize the CognitoUserPool to avoid crashing at module load time
+let _userPool: CognitoUserPool | null = null
 
-// Retrieve the current user from the user pool
-let currentUser: CognitoUser | null = userPool.getCurrentUser()
+function getUserPool(): CognitoUserPool {
+  if (!_userPool) {
+    _userPool = new CognitoUserPool(getPoolData())
+  }
+  return _userPool
+}
+
+// Retrieve the current user from the user pool (lazily)
+let currentUser: CognitoUser | null = null
 
 /**
  * Get the current authenticated user.
  * @returns Current authenticated user or null if not authenticated.
  */
 export function getCurrentUser(): CognitoUser | null {
+  if (!currentUser) {
+    currentUser = getUserPool().getCurrentUser()
+  }
   return currentUser
 }
 
@@ -31,7 +41,7 @@ export function getCurrentUser(): CognitoUser | null {
 export function getCognitoUser(username: string): CognitoUser {
   const userData = {
     Username: username,
-    Pool: userPool,
+    Pool: getUserPool(),
   }
 
   return new CognitoUser(userData)
@@ -44,7 +54,7 @@ export function getCognitoUser(username: string): CognitoUser {
 export async function getSession(): Promise<CognitoUserSession> {
   // If currentUser is not available, retrieve it from the user pool
   if (!currentUser) {
-    currentUser = userPool.getCurrentUser()
+    currentUser = getUserPool().getCurrentUser()
   }
 
   return new Promise((resolve, reject) => {
@@ -83,7 +93,7 @@ export async function signUpUserWithEmail(
     const attributeList = [new CognitoUserAttribute(attributeData)]
 
     // Sign up the user with email
-    userPool.signUp(username, password, attributeList, [], (error, signUpResult) => {
+    getUserPool().signUp(username, password, attributeList, [], (error, signUpResult) => {
       if (error) {
         reject(error)
       } else {
