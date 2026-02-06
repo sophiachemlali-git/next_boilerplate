@@ -1,0 +1,9 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run 'yarn format' to apply code formatting
+# Run 'yarn lint' to check for coding standards and best practices
+# Add all changes to the staging area in Git
+
+yarn format && yarn lint && yarn test:ci && git add .
+

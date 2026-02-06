@@ -1,0 +1,5 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run 'yarn build' to ensure a successful build before pushing changes
+yarn test:ci && yarn build
