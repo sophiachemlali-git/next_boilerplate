@@ -1,11 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useSelector, useDispatch } from 'react-redux'
 import withAuth from '@/features/Auth/withAuth'
-import { AppBar, Toolbar, Box, Typography, Button, Link as MuiLink } from '@mui/material'
+import {
+  AppBar, Toolbar, Box, Typography, Button, Link as MuiLink,
+  IconButton, Menu, MenuItem, ListItemIcon, ListItemText, Divider,
+} from '@mui/material'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
+import LogoutIcon from '@mui/icons-material/Logout'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import { selectUserInfo } from '@/store/selectors/authSelectors'
+import { logoutUser } from '@/store/actions/authActions'
+import { persistor } from '@/store/store'
+import { AppDispatch } from '@/store/store'
 
 const navLinks = ['Solutions', 'Team', 'Contact']
 
 const DashboardPage: React.FC = () => {
+  const router = useRouter()
+  const dispatch = useDispatch<AppDispatch>()
+  const userInfo = useSelector(selectUserInfo)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const menuOpen = Boolean(anchorEl)
+
+  const handleLogout = () => {
+    setAnchorEl(null)
+    const logoutCallback = () => {
+      persistor.purge()
+      sessionStorage.clear()
+      router.push('/login')
+    }
+    dispatch(logoutUser({ callback: logoutCallback }))
+  }
+
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Top Navbar */}
@@ -30,7 +58,7 @@ const DashboardPage: React.FC = () => {
             </Box>
           </Typography>
 
-          <Box sx={{ display: 'flex', gap: { xs: 3, md: 5 } }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 3, md: 5 } }}>
             {navLinks.map((label) => (
               <MuiLink
                 key={label}
@@ -46,6 +74,49 @@ const DashboardPage: React.FC = () => {
                 {label}
               </MuiLink>
             ))}
+
+            <IconButton
+              onClick={(e) => setAnchorEl(e.currentTarget)}
+              sx={{ ml: 1 }}
+              aria-label="Account menu"
+            >
+              <AccountCircleIcon sx={{ fontSize: 32, color: '#1B2A4A' }} />
+            </IconButton>
+
+            <Menu
+              anchorEl={anchorEl}
+              open={menuOpen}
+              onClose={() => setAnchorEl(null)}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              slotProps={{
+                paper: {
+                  sx: { mt: 1, minWidth: 180 },
+                },
+              }}
+            >
+              <Box sx={{ px: 2, py: 1 }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#1B2A4A' }}>
+                  {userInfo.name}
+                </Typography>
+                <Typography variant="caption" sx={{ color: '#4A5568' }}>
+                  {userInfo.email}
+                </Typography>
+              </Box>
+              <Divider />
+              <MenuItem onClick={() => { setAnchorEl(null); router.push('/profile') }}>
+                <ListItemIcon>
+                  <PersonOutlineIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Profile</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>
+                <ListItemIcon>
+                  <LogoutIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Logout</ListItemText>
+              </MenuItem>
+            </Menu>
           </Box>
         </Toolbar>
       </AppBar>
