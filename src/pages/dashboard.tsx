@@ -1,10 +1,13 @@
 import React from 'react'
+import { useRouter } from 'next/router'
 import withAuth from '@/features/Auth/withAuth'
 import { Box, Typography, Button } from '@mui/material'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import TopNavbar from '@/components/layout/TopNavbar'
 
 const DashboardPage: React.FC = () => {
+  const router = useRouter()
+
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <TopNavbar />
@@ -59,6 +62,7 @@ const DashboardPage: React.FC = () => {
             variant="contained"
             size="large"
             endIcon={<ArrowForwardIcon />}
+            onClick={() => router.push('/survey')}
             sx={{
               backgroundColor: '#5B9A4D',
               color: '#FFFFFF',
