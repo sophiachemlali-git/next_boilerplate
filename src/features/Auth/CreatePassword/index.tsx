@@ -6,6 +6,8 @@ import { forgotPassword } from '@/lib/cognito'
 import { sendCode } from '@/lib/cognito'
 import { MessagesCode, MessageProps } from '@/utils/constants'
 
+const isMockAuth = !!process.env.NEXT_PUBLIC_MOCK_AUTH
+
 import TextFieldWithValidation from '@/components/forms/TextFieldWithValidation'
 import ButtonWithLoading from '@/components/ui/ButtonWithLoading'
 import ErrorValidation from '@/components/ui/ErrorValidation'
@@ -59,11 +61,15 @@ const CreatePassword: React.FC<CreatePasswordProps> = ({
       try {
         setErrorMessage('')
         setLoading(true)
-        await forgotPassword(
-          username || '',
-          verificationCodeValidation.value || '',
-          confirmPasswordValidation.value
-        )
+        if (isMockAuth) {
+          await new Promise(resolve => setTimeout(resolve, 400))
+        } else {
+          await forgotPassword(
+            username || '',
+            verificationCodeValidation.value || '',
+            confirmPasswordValidation.value
+          )
+        }
 
         onSuccess && onSuccess()
       } catch (error) {
@@ -80,7 +86,11 @@ const CreatePassword: React.FC<CreatePasswordProps> = ({
     if (username) {
       try {
         setResendLoading(true)
-        await sendCode(username)
+        if (isMockAuth) {
+          await new Promise(resolve => setTimeout(resolve, 400))
+        } else {
+          await sendCode(username)
+        }
         setResendStatus(MessagesCode.SUCCESS)
         setToastOpen(true)
         setResendLoading(false)

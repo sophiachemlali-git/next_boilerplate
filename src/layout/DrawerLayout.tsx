@@ -1,7 +1,7 @@
 import React from 'react'
 import NavigationDrawer from '@/features/Dashboard/Drawer'
 
-import DashboardIcon from '@mui/icons-material/Dashboard'
+import HomeIcon from '@mui/icons-material/HomeOutlined'
 import JournalEntriesIcon from '@mui/icons-material/ImportContactsOutlined'
 import ManageUsersIcon from '@mui/icons-material/ManageAccountsOutlined'
 import ManageFiscalCodesIcon from '@mui/icons-material/EditCalendarOutlined'
@@ -17,7 +17,7 @@ const Drawerlayout: React.FC<DrawerlayoutProps> = ({ children }) => {
   const userInfo = useSelector(selectUserInfo)
 
   const sideBarMainLinks = [
-    { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon color="secondary" /> },
+    { label: 'Home', path: '/dashboard', icon: <HomeIcon color="secondary" /> },
     {
       label: 'Journal Entries',
       path: '/journal-entries',

@@ -7,6 +7,8 @@ import ButtonWithLoading from '@/components/ui/ButtonWithLoading'
 import { useValidEmail } from '@/hooks/useValidation'
 import { sendCode } from '@/lib/cognito'
 
+const isMockAuth = !!process.env.NEXT_PUBLIC_MOCK_AUTH
+
 interface SendCodeProps {
   onNextStep: (email: string) => void
   description?: string
@@ -29,7 +31,11 @@ const SendCode: React.FC<SendCodeProps> = ({ onNextStep, description }) => {
     if (emailValidation.isValid) {
       try {
         setLoading(true)
-        await sendCode(emailValidation.value)
+        if (isMockAuth) {
+          await new Promise(resolve => setTimeout(resolve, 400))
+        } else {
+          await sendCode(emailValidation.value)
+        }
         onNextStep(emailValidation.value)
       } catch (error) {
         console.error('Send code error:', error)

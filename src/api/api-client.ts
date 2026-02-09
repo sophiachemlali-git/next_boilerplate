@@ -49,7 +49,7 @@ apiClient.interceptors.response.use(
       const initialStatesCallback = () => {
         persistor.purge()
         sessionStorage.clear()
-        router.push('/')
+        router.push('/login')
       }
 
       store.dispatch(resetToInitialStates({ callback: initialStatesCallback }))
