@@ -13,7 +13,11 @@ import { logoutUser } from '@/store/actions/authActions'
 import { persistor } from '@/store/store'
 import { AppDispatch } from '@/store/store'
 
-const navLinks = ['Solutions', 'Team', 'Contact']
+const navLinks = [
+  { label: 'Solutions', href: '/solutions' },
+  { label: 'Team', href: '#team' },
+  { label: 'Contact', href: '#contact' },
+]
 
 const TopNavbar: React.FC = () => {
   const router = useRouter()
@@ -56,11 +60,17 @@ const TopNavbar: React.FC = () => {
         </Typography>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 3, md: 5 } }}>
-          {navLinks.map((label) => (
+          {navLinks.map((link) => (
             <MuiLink
-              key={label}
-              href={`#${label.toLowerCase()}`}
+              key={link.label}
+              href={link.href}
               underline="none"
+              onClick={(e: React.MouseEvent) => {
+                if (!link.href.startsWith('#')) {
+                  e.preventDefault()
+                  router.push(link.href)
+                }
+              }}
               sx={{
                 color: '#1B2A4A',
                 fontWeight: 500,
@@ -68,7 +78,7 @@ const TopNavbar: React.FC = () => {
                 '&:hover': { color: '#5B9A4D' },
               }}
             >
-              {label}
+              {link.label}
             </MuiLink>
           ))}
 
