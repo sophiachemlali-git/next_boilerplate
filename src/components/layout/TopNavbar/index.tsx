@@ -15,7 +15,7 @@ import { AppDispatch } from '@/store/store'
 
 const navLinks = [
   { label: 'Solutions', href: '/solutions' },
-  { label: 'Team', href: '#team' },
+  { label: 'Team', href: '/team' },
   { label: 'Contact', href: '#contact' },
 ]
 
