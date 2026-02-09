@@ -116,14 +116,19 @@ export default function ResponsiveDrawer(props: DrawerProps) {
         <Box>
           <Divider />
           <List>
-            <ListItem>
-              <ListItemIcon>
-                <UserIcon color="secondary" />
-              </ListItemIcon>
-              <ListItemText
-                primary={userData.name}
-                primaryTypographyProps={{ color: 'primary', sx: { fontWeight: '500' } }}
-              />
+            <ListItem disablePadding>
+              <ListItemButton
+                selected={isActive('/profile')}
+                onClick={() => router.push('/profile')}
+              >
+                <ListItemIcon>
+                  <UserIcon color="secondary" />
+                </ListItemIcon>
+                <ListItemText
+                  primary={userData.name || 'My Profile'}
+                  primaryTypographyProps={{ color: 'primary', sx: { fontWeight: '500' } }}
+                />
+              </ListItemButton>
             </ListItem>
             <ListItem disablePadding sx={{ mt: 1 }}>
               <ListItemButton onClick={handleLogout} data-testid="logout-button">
