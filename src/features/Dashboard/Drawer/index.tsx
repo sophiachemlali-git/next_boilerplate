@@ -61,7 +61,7 @@ export default function ResponsiveDrawer(props: DrawerProps) {
     const logoutCallback = () => {
       persistor.purge()
       sessionStorage.clear()
-      router.push('/')
+      router.push('/login')
     }
 
     dispatch(logoutUser({ callback: logoutCallback }))

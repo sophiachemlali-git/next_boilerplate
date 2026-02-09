@@ -15,9 +15,9 @@ const withAuth = (WrappedComponent: React.FC) => {
     const router = useRouter()
 
     useEffect(() => {
-      // If the user is not authenticated, redirect to the home page
+      // If the user is not authenticated, redirect to the login page
       if (!isAuthenticated) {
-        router.push('/')
+        router.push('/login')
       }
 
       // Refresh session when page reloads (skip in mock mode)

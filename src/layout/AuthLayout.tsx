@@ -12,9 +12,9 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   const router = useRouter()
 
   useEffect(() => {
-    // If the user is not authenticated, redirect to the home page
+    // If the user is not authenticated, redirect to the login page
     if (!isAuthenticated) {
-      router.push('/')
+      router.push('/login')
     }
   }, [isAuthenticated, router])
 
